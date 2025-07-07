@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Link, useLocation } from "react
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Portfolio from "./pages/Portfolio";
+import { ThemeProvider } from "./contexts/ThemeContext";
+import ThemeToggle from "./components/ThemeToggle";
 import "./App.css";
 
 function NavBar({ home }) {
@@ -11,6 +13,7 @@ function NavBar({ home }) {
       {[{ to: "/", label: "Home" }, { to: "/portfolio", label: "Portfolio" }, { to: "/about", label: "About" }].map(link => (
         <NavLink key={link.to} to={link.to}>{link.label}</NavLink>
       ))}
+      <ThemeToggle />
     </nav>
   );
 }
@@ -50,15 +53,17 @@ function AnimatedLayout({ children }) {
 
 function App() {
   return (
-    <Router>
-      <AnimatedLayout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/portfolio" element={<Portfolio />} />
-          <Route path="/about" element={<About />} />
-        </Routes>
-      </AnimatedLayout>
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <AnimatedLayout>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/portfolio" element={<Portfolio />} />
+            <Route path="/about" element={<About />} />
+          </Routes>
+        </AnimatedLayout>
+      </Router>
+    </ThemeProvider>
   );
 }
 

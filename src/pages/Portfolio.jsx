@@ -22,70 +22,53 @@ const photos = [
   },
 ];
 
-const sidebarBtnStyle = (active) => ({
-  background: 'none',
-  border: 'none',
-  borderRadius: 0,
-  color: active ? '#111' : '#aaa',
-  fontWeight: 500,
-  padding: '0.5rem 1rem',
-  cursor: 'pointer',
-  fontSize: 16,
-  outline: 'none',
-  transition: 'color 0.15s',
-});
-
 const Portfolio = () => {
   const [selected, setSelected] = useState("videos");
   const [hovered, setHovered] = useState(null);
 
   return (
-    <div style={{ display: 'flex', maxWidth: 1000, margin: '2rem auto', minHeight: 500 }}>
+    <div className="portfolio-container">
       {/* Sidebar */}
-      <aside style={{ minWidth: 160, borderRight: '1px solid #eee', padding: '1.5rem 1rem 1.5rem 0', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <aside className="portfolio-sidebar">
         {['videos', 'photos'].map((type) => (
           <button
             key={type}
             onClick={() => setSelected(type)}
             onMouseEnter={() => setHovered(type)}
             onMouseLeave={() => setHovered(null)}
-            style={{
-              ...sidebarBtnStyle(selected === type),
-              color: hovered === type || selected === type ? '#111' : '#aaa',
-            }}
+            className={`sidebar-btn ${selected === type ? 'active' : ''} ${hovered === type ? 'hovered' : ''}`}
           >
             {type.charAt(0).toUpperCase() + type.slice(1)}
           </button>
         ))}
       </aside>
       {/* Main content */}
-      <section style={{ flex: 1, padding: '1.5rem' }}>
-        <h2 style={{ marginTop: 0 }}>{selected.charAt(0).toUpperCase() + selected.slice(1)}</h2>
+      <section className="portfolio-content">
+        <h2 className="portfolio-title">{selected.charAt(0).toUpperCase() + selected.slice(1)}</h2>
         {selected === "videos" && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2rem' }}>
+          <div className="portfolio-grid">
             {videos.map((video, idx) => (
-              <div key={idx} style={{ borderRadius: 8, overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', background: '#fff' }}>
-                <div style={{ position: 'relative', width: '100%', paddingBottom: '56.25%', height: 0, background: '#000' }}>
+              <div key={idx} className="portfolio-card">
+                <div className="video-container">
                   <iframe
                     src={video.url}
                     title={video.title}
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
-                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 0 }}
                   ></iframe>
                 </div>
-                <div style={{ padding: '0.5rem', textAlign: 'center', fontSize: 16, color: '#333' }}>{video.title}</div>
+                <div className="card-title">{video.title}</div>
               </div>
             ))}
           </div>
         )}
         {selected === "photos" && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2rem' }}>
+          <div className="portfolio-grid">
             {photos.map((photo, idx) => (
-              <div key={idx} style={{ borderRadius: 8, overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', background: '#fff' }}>
-                <img src={photo.url} alt={photo.title} style={{ width: '100%', height: 220, objectFit: 'cover' }} />
-                <div style={{ padding: '0.5rem', textAlign: 'center', fontSize: 16, color: '#333' }}>{photo.title}</div>
+              <div key={idx} className="portfolio-card">
+                <img src={photo.url} alt={photo.title} className="photo-image" />
+                <div className="card-title">{photo.title}</div>
               </div>
             ))}
           </div>

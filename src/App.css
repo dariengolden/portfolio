@@ -1,3 +1,34 @@
+/* CSS Custom Properties for theming */
+:root {
+  --bg-primary: #fafafa;
+  --bg-secondary: #fff;
+  --text-primary: #222;
+  --text-secondary: #555;
+  --text-muted: #aaa;
+  --border-color: #eee;
+  --shadow-color: rgba(0,0,0,0.08);
+  --shadow-light: rgba(0,0,0,0.06);
+  --nav-bg: #fff;
+  --nav-shadow: rgba(0,0,0,0.08);
+  --card-bg: #fff;
+  --video-bg: #000;
+}
+
+.dark {
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #1a1a1a;
+  --text-primary: #ffffff;
+  --text-secondary: #cccccc;
+  --text-muted: #888888;
+  --border-color: #333333;
+  --shadow-color: rgba(0,0,0,0.3);
+  --shadow-light: rgba(0,0,0,0.2);
+  --nav-bg: #1a1a1a;
+  --nav-shadow: rgba(0,0,0,0.3);
+  --card-bg: #1a1a1a;
+  --video-bg: #000;
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -38,32 +69,34 @@
 }
 
 .read-the-docs {
-  color: #888;
+  color: var(--text-muted);
 }
 
 body {
   margin: 0;
   font-family: system-ui, sans-serif;
-  background: #fafafa;
-  color: #222;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .nav {
   display: flex;
   gap: 1.5rem;
   padding: 0.5rem 1.5rem;
-  background: #fff;
+  background: var(--nav-bg);
   border-radius: 1.5rem;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 16px var(--nav-shadow);
   margin: 2rem auto 2.5rem auto;
   width: fit-content;
   align-items: center;
   min-height: unset;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .nav-link {
   text-decoration: none;
-  color: #aaa;
+  color: var(--text-muted);
   font-weight: 500;
   padding: 0.5rem 1rem;
   transition: color 0.15s;
@@ -73,15 +106,35 @@ body {
 }
 
 .nav-link.active {
-  color: #111;
+  color: var(--text-primary);
   background: none;
   border-radius: 0;
 }
 
 .nav-link:hover {
-  color: #111;
+  color: var(--text-primary);
   background: none;
   text-decoration: none;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s ease, background-color 0.15s ease;
+  margin-left: 0.5rem;
+}
+
+.theme-toggle:hover {
+  color: var(--text-primary);
+  background-color: var(--shadow-light);
 }
 
 main {
@@ -93,11 +146,12 @@ main {
 .title {
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
+  color: var(--text-primary);
 }
 
 .tagline {
   font-size: 1.2rem;
-  color: #555;
+  color: var(--text-secondary);
   margin-bottom: 2rem;
 }
 
@@ -120,8 +174,9 @@ main {
   height: 0;
   overflow: hidden;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  background: #000;
+  box-shadow: 0 2px 8px var(--shadow-light);
+  background: var(--video-bg);
+  transition: box-shadow 0.3s ease;
 }
 
 .video-responsive iframe {
@@ -136,7 +191,7 @@ main {
 .video-title {
   margin-top: 0.5rem;
   font-size: 1rem;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .contact {
@@ -198,4 +253,106 @@ main {
   .nav-top {
     top: 1rem;
   }
+}
+
+/* Portfolio Styles */
+.portfolio-container {
+  display: flex;
+  max-width: 1000px;
+  margin: 2rem auto;
+  min-height: 500px;
+}
+
+.portfolio-sidebar {
+  min-width: 160px;
+  border-right: 1px solid var(--border-color);
+  padding: 1.5rem 1rem 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.sidebar-btn {
+  background: none;
+  border: none;
+  border-radius: 0;
+  color: var(--text-muted);
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 16px;
+  outline: none;
+  transition: color 0.15s ease;
+  text-align: left;
+}
+
+.sidebar-btn.active,
+.sidebar-btn.hovered {
+  color: var(--text-primary);
+}
+
+.portfolio-content {
+  flex: 1;
+  padding: 1.5rem;
+}
+
+.portfolio-title {
+  margin-top: 0;
+  color: var(--text-primary);
+}
+
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.portfolio-card {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px var(--shadow-light);
+  background: var(--card-bg);
+  transition: box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+.video-container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  height: 0;
+  background: var(--video-bg);
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.photo-image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.card-title {
+  padding: 0.5rem;
+  text-align: center;
+  font-size: 16px;
+  color: var(--text-primary);
+}
+
+/* About Page Styles */
+.about-title {
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.about-text {
+  color: var(--text-secondary);
+  line-height: 1.6;
 }
