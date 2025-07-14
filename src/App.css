@@ -209,7 +209,7 @@ main {
   display: flex;
   flex-direction: column;
   position: relative;
-  padding-top: 5rem;
+  padding-top: 1rem;
 }
 
 .animated-nav {
@@ -222,11 +222,11 @@ main {
 }
 
 .nav-home {
-  top: 80vh;
+  top: 76vh;
 }
 
 .nav-top {
-  top: 7rem;
+  top: 3rem;
 }
 
 .content-area {
