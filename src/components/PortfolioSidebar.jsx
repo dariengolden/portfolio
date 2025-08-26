@@ -14,11 +14,25 @@ const sections = [
   },
   {
     title: "PHOTO",
-    categories: ["Advertisement"],
+    categories: [
+      "Portrait Session",
+      "Event Photography",
+      "Product Shots",
+      "Landscape",
+      "Street Photography",
+      "Advertisement"
+    ],
   },
   {
     title: "DESIGN",
-    categories: ["Advertisement"],
+    categories: [
+      "Brand Identity",
+      "Web Design",
+      "Print Materials",
+      "Logo Design",
+      "UI/UX",
+      "Advertisement"
+    ],
   },
 ];
 
