@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-
 import PortfolioSidebar from "../components/PortfolioSidebar";
 import PortfolioGrid from "../components/PortfolioGrid";
 import PortfolioDetails from "../components/PortfolioDetails";
+import VideoModal from "../components/VideoModal";
+import ScrollAnimation from "../components/ScrollAnimation";
+import { getVideosByCategory } from "../data/videos";
 
 const details = {
   "Social Media Reel": {
@@ -77,25 +79,57 @@ const defaultCategory = "Social Media Reel";
 const Portfolio = () => {
   const [selected, setSelected] = useState(defaultCategory);
   const [hovered, setHovered] = useState(null);
+  const [selectedVideo, setSelectedVideo] = useState(null);
+
+  const handleVideoClick = (video) => {
+    setSelectedVideo(video);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedVideo(null);
+  };
+
+  // Get current category videos to show metadata
+  const currentVideos = getVideosByCategory(selected);
+  const firstVideo = currentVideos?.[0];
 
   return (
-    <div className="portfolio-container">
-      <PortfolioSidebar
-        selected={selected}
-        onSelect={setSelected}
-        hovered={hovered}
-        onHover={setHovered}
-      />
-      <section className="portfolio-content">
-        <div className="portfolio-main-grid">
-          <PortfolioGrid type="video" />
-          <PortfolioDetails
-            title={details[selected]?.title || "Title"}
-            description={details[selected]?.description || "Description."}
+    <>
+      <div className="portfolio-container">
+        <ScrollAnimation direction="left" duration={0.8}>
+          <PortfolioSidebar
+            selected={selected}
+            onSelect={setSelected}
+            hovered={hovered}
+            onHover={setHovered}
           />
-        </div>
-      </section>
-    </div>
+        </ScrollAnimation>
+        <section className="portfolio-content">
+          <div className="portfolio-main-grid">
+            <ScrollAnimation direction="up" delay={0.1} duration={0.8}>
+              <PortfolioGrid 
+                category={selected}
+                onVideoClick={handleVideoClick}
+              />
+            </ScrollAnimation>
+            <ScrollAnimation direction="up" delay={0.3} duration={0.8}>
+              <PortfolioDetails
+                title={details[selected]?.title || "Title"}
+                description={details[selected]?.description || "Description."}
+                metadata={firstVideo?.metadata}
+              />
+            </ScrollAnimation>
+          </div>
+        </section>
+      </div>
+      
+      {selectedVideo && (
+        <VideoModal 
+          video={selectedVideo}
+          onClose={handleCloseModal}
+        />
+      )}
+    </>
   );
 };
 

@@ -1,0 +1,90 @@
+/* Footer Styles - Matching page background color */
+.footer {
+  background: var(--bg-primary);
+  padding: 1.5rem 1.5rem 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: auto;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.social-icons {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.social-link:hover {
+  color: var(--text-primary);
+}
+
+.social-link:focus {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 2px;
+}
+
+.social-link svg {
+  width: 18px;
+  height: 18px;
+  transition: none;
+}
+
+.social-link:hover svg {
+  transform: none;
+}
+
+.copyright {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: center;
+  opacity: 0.8;
+  font-weight: 400;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .footer {
+    padding: 1rem 1.5rem 2.25rem;
+    min-height: auto;
+  }
+  
+  .social-icons {
+    gap: 1rem;
+  }
+  
+  .social-link {
+    padding: 0.4rem;
+  }
+  
+  .social-link svg {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .copyright {
+    font-size: 0.7rem;
+  }
+}

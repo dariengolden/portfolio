@@ -1,28 +1,34 @@
 import React from "react";
 
-const PortfolioDetails = ({ title, description }) => (
+const PortfolioDetails = ({ title, description, metadata }) => (
   <div className="portfolio-details">
     <h2 className="portfolio-details-title">{title}</h2>
     <p className="portfolio-details-desc">{description}</p>
-    <div className="portfolio-details-meta">
-      <div className="meta-item">
-        <span className="meta-label">Client:</span>
-        <span className="meta-value">Sample Client</span>
-      </div>
-      <div className="meta-item">
-        <span className="meta-label">Duration:</span>
-        <span className="meta-value">2:30</span>
-      </div>
-      <div className="meta-item">
-        <span className="meta-label">Year:</span>
-        <span className="meta-value">2024</span>
-      </div>
-    </div>
-    <div className="portfolio-details-tags">
-      <span className="tag">Video Editing</span>
-      <span className="tag">Color Grading</span>
-      <span className="tag">Motion Graphics</span>
-    </div>
+    {metadata && (
+      <>
+        <div className="portfolio-details-meta">
+          {metadata.client && (
+            <div className="meta-item">
+              <span className="meta-label">Client:</span>
+              <span className="meta-value">{metadata.client}</span>
+            </div>
+          )}
+          {metadata.year && (
+            <div className="meta-item">
+              <span className="meta-label">Year:</span>
+              <span className="meta-value">{metadata.year}</span>
+            </div>
+          )}
+        </div>
+        {metadata.tags && metadata.tags.length > 0 && (
+          <div className="portfolio-details-tags">
+            {metadata.tags.map((tag, index) => (
+              <span key={index} className="tag">{tag}</span>
+            ))}
+          </div>
+        )}
+      </>
+    )}
   </div>
 );
 

@@ -1,68 +1,103 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Portfolio from "./pages/Portfolio";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import ThemeToggle from "./components/ThemeToggle";
+import Footer from "./components/Footer";
 import "./App.css";
 
-function NavBar({ home }) {
+function NavBar() {
+  const [activeSection, setActiveSection] = useState("home");
+  const [navTop, setNavTop] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      const windowHeight = window.innerHeight;
+      
+      // Calculate navbar position
+      // Start at bottom (calc(100vh - 120px)), move up with scroll, stick at top (1.5rem = 24px)
+      const initialBottom = windowHeight - 120; // Starting position from top
+      const finalTop = 24; // 1.5rem in pixels
+      const scrollDistance = initialBottom - finalTop;
+      
+      // Calculate new position based on scroll
+      let newTop = initialBottom - scrollPosition;
+      
+      // Clamp to stick at top
+      if (newTop < finalTop) {
+        newTop = finalTop;
+      }
+      
+      setNavTop(newTop);
+
+      // Detect which section is in view
+      const sections = ["home", "portfolio", "about"];
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          if (rect.top <= windowHeight / 2 && rect.bottom >= windowHeight / 2) {
+            setActiveSection(section);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // Initial check
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
   return (
-    <nav className={"nav animated-nav " + (home ? "nav-home" : "nav-top") }>
-      {[{ to: "/", label: "Home" }, { to: "/portfolio", label: "Portfolio" }, { to: "/about", label: "About" }].map(link => (
-        <NavLink key={link.to} to={link.to}>{link.label}</NavLink>
+    <nav className="nav" style={{ top: `${navTop}px` }}>
+      {[
+        { id: "home", label: "Home" },
+        { id: "portfolio", label: "Portfolio" },
+        { id: "about", label: "About" }
+      ].map(link => (
+        <button
+          key={link.id}
+          onClick={() => scrollToSection(link.id)}
+          className={`nav-link ${activeSection === link.id ? "active" : ""}`}
+        >
+          {link.label}
+        </button>
       ))}
       <ThemeToggle />
     </nav>
   );
 }
 
-function NavLink({ to, children }) {
-  const location = useLocation();
-  return (
-    <Link
-      to={to}
-      className={
-        "nav-link" + (location.pathname === to ? " active" : "")
-      }
-    >
-      {children}
-    </Link>
-  );
-}
-
-function AnimatedLayout({ children }) {
-  const location = useLocation();
-  const isHome = location.pathname === "/";
-  return (
-    <div className={"layout-container" + (isHome ? " home-layout" : " top-layout") }>
-      <NavBar home={isHome} />
-      {isHome ? (
-        <div className={"content-area" + (isHome ? " content-home" : " content-top") }>
-          {children}
-        </div>
-      ) : (
-        <main style={{ maxWidth: 900, margin: '6rem auto 0 auto', padding: '0 1rem', width: '100%' }}>
-          {children}
-        </main>
-      )}
-    </div>
-  );
-}
-
 function App() {
   return (
     <ThemeProvider>
-      <Router>
-        <AnimatedLayout>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/portfolio" element={<Portfolio />} />
-            <Route path="/about" element={<About />} />
-          </Routes>
-        </AnimatedLayout>
-      </Router>
+      <div className="single-page-container">
+        <NavBar />
+        <main className="scroll-container">
+          <section id="home" className="section section-home">
+            <Home />
+          </section>
+          <section id="portfolio" className="section section-portfolio">
+            <Portfolio />
+          </section>
+          <section id="about" className="section section-about">
+            <About />
+          </section>
+          <section id="footer" className="section section-footer">
+            <Footer />
+          </section>
+        </main>
+      </div>
     </ThemeProvider>
   );
 }
