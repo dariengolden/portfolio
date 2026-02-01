@@ -1,111 +1,90 @@
 // Video portfolio data with Mux playback IDs Replace the playbackId values with your actual Mux video playback IDs
 
 export const videoData = {
-  "Social Media Reel": [
+  "Personal": [
     {
-      id: 1,
-      title: "Bullet Time",
-      playbackId: "4RFV7gZeMHLAPXzuk8sEVd6J01bvzIBapdaQZDnYqUXk", // Replace with your Mux playback ID
-      duration: "0:07",
-      category: "Social Media Reel",
+      id: 4,
+      title: "Untitled",
+      playbackId: "sv6SKApFvWLFUCHqK00U5GgZiguGOpch6YnQqDi7HtP00", // Replace with your Mux playback ID
+      duration: "0:36",
+      category: "Personal",
+      description: "Description of your first personal video project. This is a placeholder that you can replace with details about your actual video content, creative process, and what makes this project meaningful to you.",
       metadata: {
-        client: "35 Stripes Film and Production",
-        year: "2023",
-        tags: ["Social Media", "Travel", "Lifestyle"]
+        client: "Personal",
+        year: "2024",
+        tags: ["Personal", "Creative", "Placeholder"]
       }
     },
     {
-      id: 2,
-      title: "Songkran Celebration",
-      playbackId: "NB7HrSIoa00900zCOtLn2UIzzYC1f4BZImiE5HYRvc4zI",
-      duration: "1:51",
-      category: "Social Media Reel",
+      id: 5,
+      title: "Untitled 2",
+      playbackId: "MNlVz4O01Tb5Iq00016MGNzfZcKZHdrYCiV2MbE3zVNXsM", // Replace with your Mux playback ID
+      duration: "0:18",
+      category: "Personal",
+      description: "Description of your second personal video project. Another placeholder for you to customize with information about your video, the story behind it, and any special techniques or equipment used.",
       metadata: {
-        client: "Asia-Pacific International University",
+        client: "Personal", 
         year: "2024",
-        tags: ["Social Media", "Urban", "Storytelling"]
+        tags: ["Personal", "Creative", "Placeholder"]
       }
     }
   ],
   "Corporate": [
     {
-      id: 3,
+      id: 1,
       title: "AIU Culture Festival",
       playbackId: "tSaBWV1d6w6Ed8bbz3RzeXBUb9glM1hJlQZC6uiJBT00",
       duration: "3:51",
       category: "Corporate",
+      description: "A vibrant celebration of cultural diversity at Asia-Pacific International University. This documentary-style video captures the energy and unity of students from various backgrounds coming together to showcase their traditions, featuring colorful performances, traditional music, and heartwarming moments of cultural exchange.",
       metadata: {
         client: "Asia-Pacific International University",
         year: "2024",
       }
     },
     {
-      id: 4,
-      title: "Graduation Ceremony Highlights",
-      playbackId: "2JYXS8k78WWEljGN4oEaLNJGxByTIsup6LBJtaOvxmA",
-      duration: "0:59",
+      id: 3,
+      title: "AIU Graduation",
+      playbackId: "I4FvWuzpfo017s021NUOUBVhrlEOtejcI5E5K7kez6bno",
+      duration: "1:36",
       category: "Corporate",
+      description: "A series of highlights created for each day of the three-day graduation weekend. I got to use some nice equipment rented for the purpose of the event.",
       metadata: {
         client: "Asia-Pacific International University",
         year: "2024",
       }
     }
   ],
-  "Short Film": [
+  "Reels": [
     {
-      id: 5,
-      title: "The Last Journey",
-      playbackId: "YOUR_MUX_PLAYBACK_ID_4",
-      duration: "12:30",
-      category: "Short Film",
+      id: 2,
+      title: "Bullet Time",
+      playbackId: "4RFV7gZeMHLAPXzuk8sEVd6J01bvzIBapdaQZDnYqUXk",
+      duration: "0:07",
+      category: "Reels",
+      description: "A stunning cinematic sequence showcasing advanced camera techniques and post-production skills. This short corporate piece demonstrates precision timing and technical expertise, creating a visually striking moment that captures attention and showcases creative cinematography for commercial applications.",
       metadata: {
-        client: "Independent",
-        year: "2024",
-        tags: ["Short Film", "Drama", "Award Winner"]
+        client: "35 Stripes Film and Production",
+        year: "2023",
+        tags: ["Corporate", "Travel", "Lifestyle"]
       }
-    }
-  ],
-  "Campaign": [
+    },
     {
       id: 6,
-      title: "Climate Action",
-      playbackId: "YOUR_MUX_PLAYBACK_ID_5",
-      duration: "2:00",
-      category: "Campaign",
+      title: "Cinematic Demo Lighting",
+      playbackId: "v2tTYQsf8gcNomCwn005xVjhnlgGT400KGOuo64DqhrME",
+      duration: "0:25",
+      category: "Reels",
+      description: "A stunning cinematic sequence showcasing advanced camera techniques and post-production skills. This short corporate piece demonstrates precision timing and technical expertise, creating a visually striking moment that captures attention and showcases creative cinematography for commercial applications.",
       metadata: {
-        client: "Green Earth Org",
-        year: "2024",
-        tags: ["Campaign", "Non-Profit", "Environment"]
+        client: "35 Stripes Film and Production",
+        year: "2023",
+        tags: ["Corporate", "Travel", "Lifestyle"]
       }
     }
   ],
-  "Passion Project": [
-    {
-      id: 7,
-      title: "Urban Exploration",
-      playbackId: "YOUR_MUX_PLAYBACK_ID_6",
-      duration: "5:45",
-      category: "Passion Project",
-      metadata: {
-        client: "Personal",
-        year: "2024",
-        tags: ["Documentary", "Travel", "Urban"]
-      }
-    }
-  ],
-  "Advertisement": [
-    {
-      id: 8,
-      title: "Luxury Watch",
-      playbackId: "YOUR_MUX_PLAYBACK_ID_7",
-      duration: "0:45",
-      category: "Advertisement",
-      metadata: {
-        client: "Luxury Brand",
-        year: "2024",
-        tags: ["Advertisement", "Product", "Luxury"]
-      }
-    }
+  "Short Film": [
+    // No videos currently
   ]
 };
 

@@ -20,13 +20,7 @@ const PortfolioDetails = ({ title, description, metadata }) => (
             </div>
           )}
         </div>
-        {metadata.tags && metadata.tags.length > 0 && (
-          <div className="portfolio-details-tags">
-            {metadata.tags.map((tag, index) => (
-              <span key={index} className="tag">{tag}</span>
-            ))}
-          </div>
-        )}
+
       </>
     )}
   </div>

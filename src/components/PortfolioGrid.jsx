@@ -74,12 +74,11 @@ const PortfolioGrid = ({ category, onVideoClick }) => {
                   </div>
                 )}
                 <div className="play-overlay">
-                  <span className="play-icon">▶️</span>
+                  <div className="play-icon"></div>
                 </div>
               </div>
               <div className="item-info">
                 <h4 className="item-title">{video.title}</h4>
-                <span className="item-duration">{video.duration}</span>
               </div>
             </div>
           </motion.div>

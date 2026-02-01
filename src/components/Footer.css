@@ -1,21 +1,27 @@
 /* Footer Styles - Matching page background color */
 .footer {
   background: var(--bg-primary);
-  padding: 1.5rem 1.5rem 2.5rem;
+  padding: 1.5rem 0 2.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   min-height: auto;
+  text-align: center;
+  margin: 0;
 }
 
 .footer-content {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 1rem;
   max-width: 1200px;
   width: 100%;
+  text-align: center;
+  margin: 0 auto;
+  padding: 0 1.5rem;
 }
 
 .social-icons {
@@ -67,8 +73,12 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .footer {
-    padding: 1rem 1.5rem 2.25rem;
+    padding: 1rem 0 2.25rem;
     min-height: auto;
+  }
+  
+  .footer-content {
+    padding: 0 1rem;
   }
   
   .social-icons {

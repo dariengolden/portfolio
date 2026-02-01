@@ -34,7 +34,9 @@ const Home = () => {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  color: "white"
+                  color: "white",
+                  width: "100%",
+                  height: "100%"
                 }}>
                   Loading...
                 </div>
@@ -48,11 +50,8 @@ const Home = () => {
                   preload="auto"
                   style={{
                     width: "100%",
-                    maxWidth: "1400px",
-                    height: "600px",
-                    objectFit: "cover",
-                    borderRadius: "8px",
-                    boxShadow: "0 2px 8px var(--shadow-light)"
+                    height: "100%",
+                    objectFit: "cover"
                   }}
                 />
               </Suspense>

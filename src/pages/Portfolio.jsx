@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PortfolioSidebar from "../components/PortfolioSidebar";
-import PortfolioGrid from "../components/PortfolioGrid";
-import PortfolioDetails from "../components/PortfolioDetails";
-import VideoModal from "../components/VideoModal";
+import VideoPlayer from "../components/VideoPlayer";
 import ScrollAnimation from "../components/ScrollAnimation";
-import { getVideosByCategory } from "../data/videos";
+import { getVideosByCategory, getAllVideos } from "../data/videos";
 
+// Legacy details object - previously used for category-based descriptions
+// Now individual videos have their own descriptions in videos.js
+// This could be repurposed for Photo and Design categories in the future
 const details = {
   "Social Media Reel": {
     title: "Summer Vibes Collection",
@@ -74,62 +75,152 @@ const details = {
   },
 };
 
-const defaultCategory = "Social Media Reel";
+const defaultCategory = "Corporate";
 
 const Portfolio = () => {
   const [selected, setSelected] = useState(defaultCategory);
   const [hovered, setHovered] = useState(null);
-  const [selectedVideo, setSelectedVideo] = useState(null);
-
-  const handleVideoClick = (video) => {
-    setSelectedVideo(video);
-  };
-
-  const handleCloseModal = () => {
-    setSelectedVideo(null);
-  };
-
-  // Get current category videos to show metadata
+  
+  // Get videos for current category
   const currentVideos = getVideosByCategory(selected);
-  const firstVideo = currentVideos?.[0];
+  const [selectedVideoIndex, setSelectedVideoIndex] = useState(0);
+  
+  // Get the currently selected video
+  const currentVideo = currentVideos?.[selectedVideoIndex] || currentVideos?.[0];
 
-  return (
-    <>
+  const handleVideoSelect = (videoIndex) => {
+    setSelectedVideoIndex(videoIndex);
+  };
+
+  const handleCategoryChange = (category) => {
+    setSelected(category);
+    setSelectedVideoIndex(0); // Reset to first video when changing categories
+  };
+
+  if (!currentVideo) {
+    return (
       <div className="portfolio-container">
         <ScrollAnimation direction="left" duration={0.8}>
           <PortfolioSidebar
             selected={selected}
-            onSelect={setSelected}
+            onSelect={handleCategoryChange}
             hovered={hovered}
             onHover={setHovered}
           />
         </ScrollAnimation>
         <section className="portfolio-content">
-          <div className="portfolio-main-grid">
-            <ScrollAnimation direction="up" delay={0.1} duration={0.8}>
-              <PortfolioGrid 
-                category={selected}
-                onVideoClick={handleVideoClick}
-              />
-            </ScrollAnimation>
-            <ScrollAnimation direction="up" delay={0.3} duration={0.8}>
-              <PortfolioDetails
-                title={details[selected]?.title || "Title"}
-                description={details[selected]?.description || "Description."}
-                metadata={firstVideo?.metadata}
-              />
-            </ScrollAnimation>
+          <div style={{ 
+            padding: "2rem", 
+            textAlign: "center",
+            color: "var(--text-muted)"
+          }}>
+            No videos available for this category yet.
           </div>
         </section>
       </div>
-      
-      {selectedVideo && (
-        <VideoModal 
-          video={selectedVideo}
-          onClose={handleCloseModal}
+    );
+  }
+
+  return (
+    <div className="portfolio-container">
+      <ScrollAnimation direction="left" duration={0.8}>
+        <PortfolioSidebar
+          selected={selected}
+          onSelect={handleCategoryChange}
+          hovered={hovered}
+          onHover={setHovered}
         />
-      )}
-    </>
+      </ScrollAnimation>
+      <section className="portfolio-content">
+        <div className="youtube-layout">
+          {/* Main Video Player Section */}
+          <div className="main-video-section">
+            <ScrollAnimation direction="up" delay={0.1} duration={0.8}>
+              <div className="main-video-player">
+                <VideoPlayer
+                  key={`${currentVideo.id}-${selectedVideoIndex}`} // Force re-render on video change
+                  playbackId={currentVideo.playbackId}
+                  src={currentVideo.src}
+                  title={currentVideo.title}
+                  autoPlay={false}
+                  staticSize={true}
+                  adaptiveSize={true}
+                />
+              </div>
+            </ScrollAnimation>
+            
+            {/* Video Details Below Player */}
+            <ScrollAnimation direction="up" delay={0.2} duration={0.8}>
+              <div className="video-details">
+                <h2 className="video-title">{currentVideo.title}</h2>
+                <div className="video-metadata">
+                  {currentVideo.metadata?.client && (
+                    <div className="video-client">{currentVideo.metadata.client}</div>
+                  )}
+                  {currentVideo.metadata?.year && (
+                    <div className="video-year">{currentVideo.metadata.year}</div>
+                  )}
+                </div>
+                <div className="video-description">
+                  <p>{currentVideo.description || "Description not available."}</p>
+                </div>
+              </div>
+            </ScrollAnimation>
+          </div>
+
+          {/* Playlist Sidebar */}
+          <ScrollAnimation direction="right" delay={0.3} duration={0.8}>
+            <div className="playlist-sidebar">
+              <div className="playlist-header">
+                <h3>{selected}</h3>
+                <span className="playlist-count">{currentVideos.length} videos</span>
+              </div>
+              <div className="playlist-content">
+                {currentVideos.map((video, index) => {
+                  // Generate thumbnail URL for playlist items
+                  const muxThumbnailUrl = video.playbackId && !video.playbackId.startsWith("YOUR_MUX_PLAYBACK_ID")
+                    ? `https://image.mux.com/${video.playbackId}/thumbnail.jpg?width=168&height=94&fit_mode=smartcrop&time=0`
+                    : null;
+                  const thumbnailUrl = video.thumbnail || muxThumbnailUrl;
+
+                  return (
+                    <div 
+                      key={video.id}
+                      className={`playlist-item ${index === selectedVideoIndex ? 'active' : ''}`}
+                      onClick={() => handleVideoSelect(index)}
+                    >
+                      <div className="playlist-thumbnail">
+                        {thumbnailUrl ? (
+                          <img 
+                            src={thumbnailUrl} 
+                            alt={video.title}
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div className="placeholder-thumbnail">
+                            🎬
+                          </div>
+                        )}
+
+                        <div className="play-overlay">
+                          <div className="play-icon"></div>
+                        </div>
+                      </div>
+                      <div className="playlist-info">
+                        <h4 className="playlist-title">{video.title}</h4>
+                        {video.metadata?.client && (
+                          <p className="playlist-client">{video.metadata.client}</p>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </ScrollAnimation>
+        </div>
+      </section>
+    </div>
   );
 };
 
