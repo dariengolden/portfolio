@@ -17,10 +17,16 @@ function NavBar() {
       const windowHeight = window.innerHeight;
       
       // Calculate navbar position
-      // Start at bottom (calc(100vh - 120px)), move up with scroll, stick at top (1.5rem = 24px)
-      const initialBottom = windowHeight - 120; // Starting position from top
-      const finalTop = 24; // 1.5rem in pixels
-      const scrollDistance = initialBottom - finalTop;
+      // With new layout: title (approx 60px) + video (calc(100vh / 1.6)) + top margin (2rem = 32px) + spacing
+      // The nav should start below the video content, then move up with scroll
+      const titleHeight = 60; // Approximate height of title + margins
+      const videoHeight = windowHeight / 1.6; // Height of video (updated aspect ratio)
+      const videoTopMargin = 32; // 2rem top margin added to video
+      const homeContentHeight = titleHeight + videoHeight + videoTopMargin + 32; // Add video margin and spacing
+      
+      // Start navbar below the home content, move up with scroll, stick at top (2rem = 32px for higher position)
+      const initialBottom = homeContentHeight + 60; // Starting position from top of viewport
+      const finalTop = 20; // 2rem in pixels - higher position
       
       // Calculate new position based on scroll
       let newTop = initialBottom - scrollPosition;
