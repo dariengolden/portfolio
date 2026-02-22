@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import PortfolioSidebar from "../components/PortfolioSidebar";
 import VideoPlayer from "../components/VideoPlayer";
 import ScrollAnimation from "../components/ScrollAnimation";
@@ -84,17 +84,25 @@ const Portfolio = () => {
   // Get videos for current category
   const currentVideos = getVideosByCategory(selected);
   const [selectedVideoIndex, setSelectedVideoIndex] = useState(0);
+  const [subVideoIndex, setSubVideoIndex] = useState(0);
   
   // Get the currently selected video
   const currentVideo = currentVideos?.[selectedVideoIndex] || currentVideos?.[0];
 
+  // Resolve the active playback ID (sub-video override if applicable)
+  const activePlaybackId = currentVideo?.subVideos
+    ? currentVideo.subVideos[subVideoIndex]?.playbackId || currentVideo.playbackId
+    : currentVideo?.playbackId;
+
   const handleVideoSelect = (videoIndex) => {
     setSelectedVideoIndex(videoIndex);
+    setSubVideoIndex(0); // Reset sub-video selection when switching videos
   };
 
   const handleCategoryChange = (category) => {
     setSelected(category);
     setSelectedVideoIndex(0); // Reset to first video when changing categories
+    setSubVideoIndex(0); // Reset sub-video selection
   };
 
   if (!currentVideo) {
@@ -136,91 +144,97 @@ const Portfolio = () => {
         </ScrollAnimation>
         <section className="portfolio-content">
           <div className="youtube-layout">
-            {/* Main Video Player Section */}
-            <div className="main-video-section">
-              <ScrollAnimation direction="up" delay={0.1} duration={0.8}>
-                <div className="main-video-player">
-                  <VideoPlayer
-                    key={`${currentVideo.id}-${selectedVideoIndex}`} // Force re-render on video change
-                    playbackId={currentVideo.playbackId}
-                    src={currentVideo.src}
-                    title={currentVideo.title}
-                    autoPlay={false}
-                    staticSize={true}
-                    adaptiveSize={true}
-                  />
-                </div>
-              </ScrollAnimation>
-              
-              {/* Video Details Below Player */}
-              <ScrollAnimation direction="up" delay={0.2} duration={0.8}>
-                <div className="video-details">
-                  <h2 className="video-title">{currentVideo.title}</h2>
-                  <div className="video-metadata">
-                    {currentVideo.metadata?.client && (
-                      <div className="video-client">{currentVideo.metadata.client}</div>
-                    )}
-                    {currentVideo.metadata?.year && (
-                      <div className="video-year">{currentVideo.metadata.year}</div>
-                    )}
-                  </div>
-                  <div className="video-description">
-                    <p>{currentVideo.description || "Description not available."}</p>
-                  </div>
-                </div>
-              </ScrollAnimation>
+            {/* Main Video Player */}
+            <div className="main-video-player">
+              <VideoPlayer
+                key={`${currentVideo.id}-${selectedVideoIndex}-${subVideoIndex}`} // Force re-render on video change
+                playbackId={activePlaybackId}
+                src={currentVideo.src}
+                title={currentVideo.title}
+                autoPlay={false}
+                staticSize={true}
+                adaptiveSize={true}
+              />
             </div>
 
             {/* Playlist Sidebar */}
-            <ScrollAnimation direction="right" delay={0.3} duration={0.8}>
-              <div className="playlist-sidebar">
-                <div className="playlist-header">
-                  <h3>{selected}</h3>
-                  <span className="playlist-count">{currentVideos.length} videos</span>
-                </div>
-                <div className="playlist-content">
-                  {currentVideos.map((video, index) => {
-                    // Generate thumbnail URL for playlist items
-                    const muxThumbnailUrl = video.playbackId && !video.playbackId.startsWith("YOUR_MUX_PLAYBACK_ID")
-                      ? `https://image.mux.com/${video.playbackId}/thumbnail.jpg?width=168&height=94&fit_mode=smartcrop&time=0`
-                      : null;
-                    const thumbnailUrl = video.thumbnail || muxThumbnailUrl;
+            <div className="playlist-sidebar">
+              <div className="playlist-header">
+                <h3>{selected}</h3>
+                <span className="playlist-count">{currentVideos.length} videos</span>
+              </div>
+              <div className="playlist-content">
+                {currentVideos.map((video, index) => {
+                  // Generate thumbnail URL for playlist items
+                  const muxThumbnailUrl = video.playbackId && !video.playbackId.startsWith("YOUR_MUX_PLAYBACK_ID")
+                    ? `https://image.mux.com/${video.playbackId}/thumbnail.jpg?width=168&height=94&fit_mode=smartcrop&time=0`
+                    : null;
+                  const thumbnailUrl = video.thumbnail || muxThumbnailUrl;
 
-                    return (
-                      <div 
-                        key={video.id}
-                        className={`playlist-item ${index === selectedVideoIndex ? 'active' : ''}`}
-                        onClick={() => handleVideoSelect(index)}
-                      >
-                        <div className="playlist-thumbnail">
-                          {thumbnailUrl ? (
-                            <img 
-                              src={thumbnailUrl} 
-                              alt={video.title}
-                              loading="lazy"
-                            />
-                          ) : (
-                            <div className="placeholder-thumbnail">
-                              🎬
-                            </div>
-                          )}
-
-                          <div className="play-overlay">
-                            <div className="play-icon"></div>
+                  return (
+                    <div 
+                      key={video.id}
+                      className={`playlist-item ${index === selectedVideoIndex ? 'active' : ''}`}
+                      onClick={() => handleVideoSelect(index)}
+                    >
+                      <div className="playlist-thumbnail">
+                        {thumbnailUrl ? (
+                          <img 
+                            src={thumbnailUrl} 
+                            alt={video.title}
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div className="placeholder-thumbnail">
+                            🎬
                           </div>
-                        </div>
-                        <div className="playlist-info">
-                          <h4 className="playlist-title">{video.title}</h4>
-                          {video.metadata?.client && (
-                            <p className="playlist-client">{video.metadata.client}</p>
-                          )}
+                        )}
+
+                        <div className="play-overlay">
+                          <div className="play-icon"></div>
                         </div>
                       </div>
-                    );
-                  })}
-                </div>
+                      <div className="playlist-info">
+                        <h4 className="playlist-title">{video.title}</h4>
+                        {video.metadata?.client && (
+                          <p className="playlist-client">{video.metadata.client}</p>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-            </ScrollAnimation>
+            </div>
+          {/* Video Details Below Player */}
+          <div className="video-details">
+            <div className="video-title-row">
+              <h2 className="video-title">{currentVideo.title}</h2>
+              {currentVideo.subVideos && (
+                <div className="sub-video-picker">
+                  {currentVideo.subVideos.map((sub, idx) => (
+                    <button
+                      key={idx}
+                      className={`sub-video-btn ${idx === subVideoIndex ? 'active' : ''}`}
+                      onClick={() => setSubVideoIndex(idx)}
+                    >
+                      {sub.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div className="video-metadata">
+              {currentVideo.metadata?.client && (
+                <div className="video-client">{currentVideo.metadata.client}</div>
+              )}
+              {currentVideo.metadata?.year && (
+                <div className="video-year">{currentVideo.metadata.year}</div>
+              )}
+            </div>
+            <div className="video-description">
+              <p>{currentVideo.description || "Description not available."}</p>
+            </div>
+          </div>
           </div>
         </section>
       </div>

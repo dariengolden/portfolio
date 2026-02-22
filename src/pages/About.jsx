@@ -61,9 +61,9 @@ const About = () => {
           </ScrollAnimation>
           <ScrollAnimation direction="up" delay={0.2} duration={0.8}>
             <p className="about-text">Hey, I'm Darien. Making videos is among the top things I spend my time doing. Other top things include playing music on the guitar and tech. The latter mentioned is largely due to my academic foundation in Information Technology.</p>
-            <br></br>
+            {/* <br></br> */}
             <p className="about-text">
-              There is a feeling you get when you have received so much, that it buries you. A nurturing appreciation — and greater so, a respect — for the people around you with the heartbeat of an urge to do something about it. Making stuff is my doing something about it. But to make yourself feel nothing, as to not feel anything — what a waste!
+              I don't think creativity is exclusive. I think all of us are creative, depending on how inspired we feel.
             </p>
           </ScrollAnimation>
         </div>

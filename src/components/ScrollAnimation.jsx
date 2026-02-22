@@ -6,7 +6,7 @@ import { useRef } from "react";
 const ScrollAnimation = ({ children, delay = 0, duration = 0.8, direction = "up" }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { 
-    once: false, // Animation triggers both ways
+    once: true, // Animation triggers once to prevent stutter at scroll boundaries
     margin: "-100px" // Trigger animation when element is 100px into viewport
   });
 
