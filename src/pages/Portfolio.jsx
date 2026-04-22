@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PortfolioSidebar from "../components/PortfolioSidebar";
 import VideoPlayer from "../components/VideoPlayer";
 import ScrollAnimation from "../components/ScrollAnimation";
-import { getVideosByCategory, getAllVideos } from "../data/videos";
+import { getVideosByCategory, getAllVideos, videoData } from "../data/videos";
 
 // Legacy details object - previously used for category-based descriptions
 // Now individual videos have their own descriptions in videos.js
@@ -80,6 +80,7 @@ const defaultCategory = "Corporate";
 const Portfolio = () => {
   const [selected, setSelected] = useState(defaultCategory);
   const [hovered, setHovered] = useState(null);
+  const [playlistOpen, setPlaylistOpen] = useState(false);
   
   // Get videos for current category
   const currentVideos = getVideosByCategory(selected);
@@ -101,37 +102,67 @@ const Portfolio = () => {
 
   const handleCategoryChange = (category) => {
     setSelected(category);
-    setSelectedVideoIndex(0); // Reset to first video when changing categories
-    setSubVideoIndex(0); // Reset sub-video selection
+    setSelectedVideoIndex(0);
+    setSubVideoIndex(0);
+    setPlaylistOpen(false);
   };
 
   if (!currentVideo) {
     return (
-      <div className="portfolio-container">
-        <div className="portfolio-inner-wrapper">
-          <ScrollAnimation direction="left" duration={0.8}>
-            <PortfolioSidebar
-              selected={selected}
-              onSelect={handleCategoryChange}
-              hovered={hovered}
-              onHover={setHovered}
-            />
-          </ScrollAnimation>
-          <section className="portfolio-content">
-            <div style={{ 
-              padding: "2rem", 
-              textAlign: "center",
-              color: "var(--text-muted)"
-            }}>
-              No videos available for this category yet.
-            </div>
-          </section>
+      <>
+        <div className="section-header">
+          <div className="section-header-row">
+            <span className="section-num">01</span>
+            <div className="section-chrome-rule" />
+            <h2 className="section-heading">Work.</h2>
+          </div>
         </div>
-      </div>
+        <div className="portfolio-container">
+          <div className="portfolio-inner-wrapper">
+            <ScrollAnimation direction="left" duration={0.8}>
+              <PortfolioSidebar
+                selected={selected}
+                onSelect={handleCategoryChange}
+                hovered={hovered}
+                onHover={setHovered}
+              />
+            </ScrollAnimation>
+            <section className="portfolio-content">
+              <div style={{ padding: "2rem", textAlign: "center", color: "rgba(255,255,255,0.3)" }}>
+                No videos available for this category yet.
+              </div>
+            </section>
+          </div>
+        </div>
+      </>
     );
   }
 
+  const availableCategories = Object.keys(videoData);
+
   return (
+    <>
+      <div className="section-header">
+        <div className="section-header-row">
+          <span className="section-num">01</span>
+          <div className="section-chrome-rule" />
+          <h2 className="section-heading">Work.</h2>
+        </div>
+      </div>
+
+      {/* Horizontal category tabs — visible on mobile only */}
+      <div className="mobile-category-tabs">
+        {availableCategories.map((cat) => (
+          <button
+            key={cat}
+            className={`mobile-cat-btn ${selected === cat ? "active" : ""}`}
+            onClick={() => handleCategoryChange(cat)}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
     <div className="portfolio-container">
       <div className="portfolio-inner-wrapper">
         <ScrollAnimation direction="left" duration={0.8}>
@@ -157,55 +188,7 @@ const Portfolio = () => {
               />
             </div>
 
-            {/* Playlist Sidebar */}
-            <div className="playlist-sidebar">
-              <div className="playlist-header">
-                <h3>{selected}</h3>
-                <span className="playlist-count">{currentVideos.length} videos</span>
-              </div>
-              <div className="playlist-content">
-                {currentVideos.map((video, index) => {
-                  // Generate thumbnail URL for playlist items
-                  const muxThumbnailUrl = video.playbackId && !video.playbackId.startsWith("YOUR_MUX_PLAYBACK_ID")
-                    ? `https://image.mux.com/${video.playbackId}/thumbnail.jpg?width=168&height=94&fit_mode=smartcrop&time=0`
-                    : null;
-                  const thumbnailUrl = video.thumbnail || muxThumbnailUrl;
-
-                  return (
-                    <div 
-                      key={video.id}
-                      className={`playlist-item ${index === selectedVideoIndex ? 'active' : ''}`}
-                      onClick={() => handleVideoSelect(index)}
-                    >
-                      <div className="playlist-thumbnail">
-                        {thumbnailUrl ? (
-                          <img 
-                            src={thumbnailUrl} 
-                            alt={video.title}
-                            loading="lazy"
-                          />
-                        ) : (
-                          <div className="placeholder-thumbnail">
-                            🎬
-                          </div>
-                        )}
-
-                        <div className="play-overlay">
-                          <div className="play-icon"></div>
-                        </div>
-                      </div>
-                      <div className="playlist-info">
-                        <h4 className="playlist-title">{video.title}</h4>
-                        {video.metadata?.client && (
-                          <p className="playlist-client">{video.metadata.client}</p>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          {/* Video Details Below Player */}
+          {/* Video Details Below Player — comes before playlist in DOM so mobile stacks correctly */}
           <div className="video-details">
             <div className="video-title-row">
               <h2 className="video-title">{currentVideo.title}</h2>
@@ -234,11 +217,72 @@ const Portfolio = () => {
             <div className="video-description">
               <p>{currentVideo.description || "Description not available."}</p>
             </div>
+
+            {/* Mobile-only toggle — hidden on desktop via CSS */}
+            <button
+              className="playlist-toggle"
+              onClick={() => setPlaylistOpen((o) => !o)}
+              aria-expanded={playlistOpen}
+            >
+              <span>{playlistOpen ? "Hide playlist" : "More videos"}</span>
+              <span className="playlist-toggle-count">{currentVideos.length}</span>
+              <svg
+                className={`playlist-toggle-chevron${playlistOpen ? " is-open" : ""}`}
+                width="10" height="6" viewBox="0 0 10 6"
+                fill="none" aria-hidden="true"
+              >
+                <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5"
+                  strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
           </div>
+
+            {/* Playlist Sidebar */}
+            <div className={`playlist-sidebar${playlistOpen ? " open" : ""}`}>
+              <div className="playlist-header">
+                <h3>{selected}</h3>
+                <span className="playlist-count">{currentVideos.length} videos</span>
+              </div>
+              <div className="playlist-content">
+                {currentVideos.map((video, index) => {
+                  const muxThumbnailUrl =
+                    video.playbackId && !video.playbackId.startsWith("YOUR_MUX_PLAYBACK_ID")
+                      ? `https://image.mux.com/${video.playbackId}/thumbnail.jpg?width=168&height=94&fit_mode=smartcrop&time=0`
+                      : null;
+                  const thumbnailUrl = video.thumbnail || muxThumbnailUrl;
+
+                  return (
+                    <div
+                      key={video.id}
+                      className={`playlist-item ${index === selectedVideoIndex ? "active" : ""}`}
+                      onClick={() => handleVideoSelect(index)}
+                    >
+                      <div className="playlist-thumbnail">
+                        {thumbnailUrl ? (
+                          <img src={thumbnailUrl} alt={video.title} loading="lazy" />
+                        ) : (
+                          <div className="placeholder-thumbnail">🎬</div>
+                        )}
+                        <div className="play-overlay">
+                          <div className="play-icon" />
+                        </div>
+                      </div>
+                      <div className="playlist-info">
+                        <h4 className="playlist-title">{video.title}</h4>
+                        {video.metadata?.client && (
+                          <p className="playlist-client">{video.metadata.client}</p>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </section>
       </div>
     </div>
+    </>
   );
 };
 

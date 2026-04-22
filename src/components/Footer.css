@@ -1,14 +1,13 @@
-/* Footer Styles - Matching page background color */
 .footer {
-  background: var(--bg-primary);
-  padding: 1.5rem 0 2.5rem;
+  background: var(--section-footer-bg, #050505);
+  border-top: 1px solid var(--nav-border, rgba(255, 255, 255, 0.05));
+  padding: 2rem 0 2.75rem;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  min-height: auto;
   text-align: center;
-  margin: 0;
+  transition: background 0.3s ease;
 }
 
 .footer-content {
@@ -16,17 +15,15 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  gap: 1.25rem;
   max-width: 1200px;
   width: 100%;
-  text-align: center;
-  margin: 0 auto;
   padding: 0 1.5rem;
 }
 
 .social-icons {
   display: flex;
-  gap: 1.5rem;
+  gap: 1.75rem;
   align-items: center;
   justify-content: center;
 }
@@ -36,65 +33,30 @@
   align-items: center;
   justify-content: center;
   padding: 0.5rem;
-  color: var(--text-muted);
+  color: var(--nav-toggle-color, rgba(255, 255, 255, 0.28));
   text-decoration: none;
   border-radius: 0.5rem;
-  transition: all 0.3s ease;
+  transition: color 0.2s ease;
   cursor: pointer;
 }
 
-.social-link:hover {
-  color: var(--text-primary);
-}
-
-.social-link:focus {
-  outline: 2px solid var(--text-primary);
-  outline-offset: 2px;
-}
+.social-link:hover { color: var(--nav-link-active, rgba(255, 255, 255, 0.78)); }
 
 .social-link svg {
-  width: 18px;
-  height: 18px;
-  transition: none;
-}
-
-.social-link:hover svg {
-  transform: none;
+  width: 17px;
+  height: 17px;
 }
 
 .copyright {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  text-align: center;
-  opacity: 0.8;
-  font-weight: 400;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--playlist-client-color, rgba(255, 255, 255, 0.15));
+  font-family: "Inter", sans-serif;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
-  .footer {
-    padding: 1rem 0 2.25rem;
-    min-height: auto;
-  }
-  
-  .footer-content {
-    padding: 0 1rem;
-  }
-  
-  .social-icons {
-    gap: 1rem;
-  }
-  
-  .social-link {
-    padding: 0.4rem;
-  }
-  
-  .social-link svg {
-    width: 16px;
-    height: 16px;
-  }
-  
-  .copyright {
-    font-size: 0.7rem;
-  }
+  .footer { padding: 1.5rem 0 2.5rem; }
+  .social-icons { gap: 1.25rem; }
+  .social-link svg { width: 16px; height: 16px; }
 }

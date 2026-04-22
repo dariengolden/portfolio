@@ -188,7 +188,7 @@ export const videoData = {
 
 // For the hero video on homepage
 export const heroVideo = {
-  playbackId: "YOUR_MUX_PLAYBACK_ID_HERO", // Replace with your Mux playback ID for hero video
+  playbackId: "LS0102UHzGcgELMPOc9SBxNzRWQmoPI018VohHeZDA02dzI",
   title: "Showreel 2024"
 };
 
