@@ -348,7 +348,7 @@ body {
 }
 
 /* ============================================================
-   Mobile category tabs (hidden on desktop, shown on mobile)
+   Mobile category tabs — legacy, hidden everywhere now
    ============================================================ */
 .mobile-category-tabs {
   display: none;
@@ -1189,4 +1189,572 @@ body {
   .section-header { padding: 0 0.75rem; }
   .about { padding: 0 1rem; }
   .nav-link { padding: 0.4rem 0.65rem; font-size: 11px; }
+}
+
+/* ============================================================
+   Floating Liquid-Glass Video Player
+   ============================================================ */
+
+.fp-wrapper {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 2;
+}
+
+/* Outer shell — always dark regardless of page theme */
+.fp-container {
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #08050300;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.5),
+    0 40px 90px rgba(0, 0, 0, 0.5),
+    0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+/* ── Video area ─────────────────────────────────────────── */
+.fp-main {
+  position: relative;
+  width: 100%;
+  height: clamp(280px, 42vw, 580px);
+  background: #000;
+  overflow: hidden;
+}
+
+/* MuxPlayer fills container, native controls suppressed */
+.fp-main mux-player,
+.fp-main video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  --controls: none;
+  --media-control-bar-display: none;
+  --media-center-controls-display: none;
+  --media-preview-display: none;
+}
+
+.fp-fallback {
+  width: 100%;
+  height: 100%;
+  background: #080503;
+}
+
+/* Gradient darkens bottom of video so timeline panel blends */
+.fp-vignette {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.04) 0%,
+    transparent 35%,
+    rgba(0,0,0,0.55) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Info card (top-right liquid glass) ─────────────────── */
+.fp-card {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 272px;
+  max-height: calc(100% - 32px);
+  background: rgba(36, 22, 12, 0.68);
+  backdrop-filter: blur(30px) saturate(160%) brightness(0.88);
+  -webkit-backdrop-filter: blur(30px) saturate(160%) brightness(0.88);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 16px;
+  padding: 15px 14px 14px;
+  overflow-y: auto;
+  z-index: 10;
+  box-shadow:
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.07),
+    0 10px 36px rgba(0, 0, 0, 0.55);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
+
+.fp-card::-webkit-scrollbar { width: 3px; }
+.fp-card::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+.fp-card-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin-bottom: 7px;
+}
+
+.fp-card-ico {
+  color: rgba(255, 255, 255, 0.5);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.fp-card-name {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+}
+
+.fp-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 9px;
+}
+
+.fp-card-client {
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.48);
+  background: rgba(255, 255, 255, 0.08);
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.fp-card-year {
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.28);
+}
+
+.fp-card-desc {
+  font-size: 12px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.62);
+  margin: 0 0 12px;
+}
+
+/* Sub-video row */
+.fp-sub-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 11px;
+}
+
+.fp-sub-btn {
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.42);
+  font-size: 11px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.fp-sub-btn.active {
+  background: rgba(255, 255, 255, 0.85);
+  color: #100800;
+  border-color: transparent;
+  font-weight: 600;
+}
+
+/* Playlist */
+.fp-playlist {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  padding-top: 11px;
+}
+
+.fp-pl-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 4px;
+  transition: background 0.15s ease;
+}
+
+.fp-pl-item:hover { background: rgba(255, 255, 255, 0.06); }
+
+.fp-pl-thumb {
+  position: relative;
+  width: 74px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: 7px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fp-pl-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+.fp-pl-empty {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.22);
+}
+
+.fp-pl-ring {
+  position: absolute;
+  inset: 0;
+  border: 2px solid rgba(255, 255, 255, 0.75);
+  border-radius: 7px;
+  pointer-events: none;
+}
+
+.fp-pl-name {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.46);
+  line-height: 1.35;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  transition: color 0.15s;
+}
+
+.fp-pl-item.active .fp-pl-name {
+  color: rgba(255, 255, 255, 0.88);
+  font-weight: 500;
+}
+
+/* ── Timeline panel ─────────────────────────────────────── */
+.fp-tl-panel {
+  background: rgba(7, 4, 2, 0.96);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 10px 18px 8px;
+}
+
+.fp-tl-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 9px;
+}
+
+.fp-play-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s ease;
+  padding: 0;
+}
+
+.fp-play-btn:hover { background: rgba(255, 255, 255, 0.13); }
+
+.fp-time-txt {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.35);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.03em;
+}
+
+/* Scrollable ruler */
+.fp-ruler {
+  position: relative;
+  overflow-x: auto;
+  overflow-y: hidden;
+  height: 54px;
+  cursor: pointer;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.09) transparent;
+}
+
+.fp-ruler::-webkit-scrollbar { height: 3px; }
+.fp-ruler::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.09);
+  border-radius: 2px;
+}
+
+.fp-ruler-inner {
+  position: relative;
+  height: 100%;
+  min-width: 100%;
+}
+
+/* Track line */
+.fp-track {
+  position: absolute;
+  top: 34px;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: rgba(255, 255, 255, 0.09);
+  border-radius: 1px;
+}
+
+/* Played portion */
+.fp-progress {
+  position: absolute;
+  top: 34px;
+  left: 0;
+  height: 1.5px;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 1px;
+  pointer-events: none;
+  min-width: 0;
+}
+
+/* Major tick (every 5s) */
+.fp-major-tick {
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+
+.fp-tick-lbl {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.28);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  display: block;
+  margin-bottom: 4px;
+  line-height: 1;
+}
+
+.fp-major-tick::after {
+  content: '';
+  width: 1px;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.18);
+  margin-top: 18px;
+}
+
+/* Minor tick (every 1s) */
+.fp-minor-tick {
+  position: absolute;
+  top: 32px;
+  width: 1px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+/* Playhead */
+.fp-playhead {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  transform: translateX(-50%);
+  cursor: ew-resize;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  touch-action: none;
+}
+
+.fp-ph-knob {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.fp-ph-line {
+  width: 1.5px;
+  flex: 1;
+  background: rgba(255, 255, 255, 0.65);
+  border-radius: 1px;
+  margin-top: 3px;
+}
+
+/* ── Category selector bar ──────────────────────────────── */
+.fp-cat-bar {
+  display: flex;
+  gap: 6px;
+  padding: 10px 18px 13px;
+  overflow-x: auto;
+  background: rgba(4, 3, 1, 0.98);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  scrollbar-width: none;
+}
+
+.fp-cat-bar::-webkit-scrollbar { display: none; }
+
+.fp-cat-btn {
+  flex-shrink: 0;
+  padding: 5px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  min-height: 30px;
+}
+
+.fp-cat-btn:hover {
+  color: rgba(255, 255, 255, 0.65);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.fp-cat-btn.active {
+  background: rgba(255, 255, 255, 0.88);
+  color: #0b0702;
+  border-color: transparent;
+  font-weight: 600;
+}
+
+/* ── Responsive ─────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .fp-card {
+    width: 240px;
+  }
+}
+
+@media (max-width: 768px) {
+  .fp-wrapper { padding: 0 0.75rem; }
+  .fp-container { border-radius: 14px; }
+  .fp-main { height: clamp(200px, 56vw, 360px); }
+
+  /* On mobile, detach the card from absolute and flow below video */
+  .fp-card {
+    position: static;
+    width: 100%;
+    max-height: none;
+    border-radius: 0;
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    background: rgba(16, 10, 5, 0.98);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
+    padding: 14px 14px 12px;
+  }
+
+  .fp-vignette { display: none; }
+  .fp-tl-panel { padding: 9px 12px 7px; }
+  .fp-cat-bar { padding: 8px 12px 11px; }
+}
+
+@media (max-width: 480px) {
+  .fp-wrapper { padding: 0 0.5rem; }
+  .fp-main { height: clamp(170px, 56vw, 280px); }
+  .fp-card-name { font-size: 12px; }
+  .fp-card-desc { font-size: 11.5px; }
+  .fp-pl-thumb { width: 64px; height: 36px; }
+}
+
+/* ── Light mode overrides ───────────────────────────────────
+   The info card always sits over dark video, so it stays dark.
+   The chrome around it (container shell, timeline, category bar)
+   adapts to the page theme.
+   ─────────────────────────────────────────────────────────── */
+html:not(.dark) .fp-container {
+  border-color: rgba(0, 0, 0, 0.09);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.06),
+    0 32px 70px rgba(0, 0, 0, 0.12),
+    0 6px 20px rgba(0, 0, 0, 0.07);
+}
+
+html:not(.dark) .fp-tl-panel {
+  background: rgba(246, 244, 242, 0.98);
+  border-top-color: rgba(0, 0, 0, 0.07);
+}
+
+html:not(.dark) .fp-ruler {
+  scrollbar-color: rgba(0, 0, 0, 0.1) transparent;
+}
+html:not(.dark) .fp-ruler::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+html:not(.dark) .fp-play-btn {
+  border-color: rgba(0, 0, 0, 0.12);
+  background: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.72);
+}
+html:not(.dark) .fp-play-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+html:not(.dark) .fp-time-txt {
+  color: rgba(0, 0, 0, 0.38);
+}
+
+html:not(.dark) .fp-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+html:not(.dark) .fp-progress {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+html:not(.dark) .fp-tick-lbl {
+  color: rgba(0, 0, 0, 0.28);
+}
+html:not(.dark) .fp-major-tick::after {
+  background: rgba(0, 0, 0, 0.14);
+}
+html:not(.dark) .fp-minor-tick {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+html:not(.dark) .fp-ph-knob {
+  background: #1a1a1a;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.25);
+}
+html:not(.dark) .fp-ph-line {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+html:not(.dark) .fp-cat-bar {
+  background: rgba(243, 241, 239, 0.99);
+  border-top-color: rgba(0, 0, 0, 0.06);
+}
+html:not(.dark) .fp-cat-btn {
+  border-color: rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.36);
+}
+html:not(.dark) .fp-cat-btn:hover {
+  color: rgba(0, 0, 0, 0.62);
+  border-color: rgba(0, 0, 0, 0.18);
+}
+html:not(.dark) .fp-cat-btn.active {
+  background: rgba(0, 0, 0, 0.82);
+  color: #f5f3f0;
+  border-color: transparent;
+}
+
+/* Mobile info card in light mode — keep dark since it's always on video */
+@media (max-width: 768px) {
+  html:not(.dark) .fp-card {
+    background: rgba(28, 18, 10, 0.98);
+    border-top-color: rgba(255, 255, 255, 0.07);
+  }
 }
